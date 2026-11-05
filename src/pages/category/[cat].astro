@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryList from '../../components/EntryList.astro';
+import { getPosts, CATEGORIES, type CategoryKey } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((cat) => ({ params: { cat } }));
+}
+const cat = Astro.params.cat as CategoryKey;
+const posts = await getPosts(cat);
+const title = CATEGORIES[cat];
+---
+<Base title={title}>
+  <div class="article row" style="padding-bottom:0">
+    <div class="in-margin"></div>
+    <div class="main"><h1>{title}</h1></div>
+  </div>
+  <EntryList posts={posts} byYear />
+</Base>

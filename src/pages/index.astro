@@ -1,0 +1,47 @@
+---
+import { getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EntryList from '../components/EntryList.astro';
+import { getPosts, postHref, formatDate } from '../lib/posts';
+
+const home = (await getEntry('pages', 'home'))!;
+const { Content } = await render(home);
+const news = (await getPosts('news')).slice(0, 6);
+const [tasks] = await getPosts('matherials');
+const [results] = await getPosts('results');
+---
+<Base>
+  <section class="hero row">
+    <div class="in-margin"><span class="since">з 1998 року</span></div>
+    <div class="main hero-grid">
+      <img class="emblem" src="/emblem.webp" width="560" height="662" alt="Емблема Всеукраїнського турніру юних математиків" fetchpriority="high" />
+      <div class="hero-text">
+      <h1 class="hero-title">Турнір юних математиків</h1>
+      <p class="hero-lead">Всеукраїнський, імені професора М.&nbsp;Й.&nbsp;Ядренка. Школярі командами розв'язують задачі дослідницького характеру й захищають свої розв'язання в математичних боях.</p>
+      <ul class="next-steps">
+        <li><a href={postHref(tasks)}>Завдання турніру <span>{tasks.data.date.getUTCFullYear()}</span></a></li>
+        <li><a href={postHref(results)}>Останні результати <span>{results.data.date.getUTCFullYear()}</span></a></li>
+        <li><a href="/aktualni-novini/pravila/">Правила проведення <span>регламент</span></a></li>
+      </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-head row">
+    <div class="in-margin"></div>
+    <div class="main"><h2>Новини</h2></div>
+  </div>
+  <EntryList posts={news} />
+  <div class="more row">
+    <div class="in-margin"></div>
+    <div class="main"><a href="/category/news/">Усі новини</a></div>
+  </div>
+
+  <article class="article row">
+    <div class="in-margin"></div>
+    <div class="main">
+      <h2>Про турнір</h2>
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+</Base>

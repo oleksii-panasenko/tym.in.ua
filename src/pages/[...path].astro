@@ -1,0 +1,43 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PhotoViewer from '../components/PhotoViewer.astro';
+import { getPosts, postHref, formatDate, CATEGORIES } from '../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = (await getPosts()).map((entry) => ({
+    params: { path: postHref(entry).replace(/^\/|\/$/g, '') },
+    props: { entry, kind: 'post' as const },
+  }));
+  const pages = (await getCollection('pages'))
+    .filter((p) => p.data.path !== '/')
+    .map((entry) => ({
+      params: { path: entry.data.path.replace(/^\/|\/$/g, '') },
+      props: { entry, kind: 'page' as const },
+    }));
+  return [...posts, ...pages];
+}
+
+const { entry, kind } = Astro.props;
+const { Content } = await render(entry);
+const hasGallery = (entry.body ?? '').includes('class="gallery"');
+const date = kind === 'post' ? (entry.data as { date: Date }).date : null;
+const cats = kind === 'post' ? (entry.data as { categories: (keyof typeof CATEGORIES)[] }).categories : [];
+---
+<Base title={entry.data.title}>
+  <article class="article row">
+    {date ? (
+      <time class="in-margin keep" datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>
+    ) : <div class="in-margin"></div>}
+    <div class="main">
+      {cats.length > 0 && (
+        <nav class="cats" aria-label="Розділи">
+          {cats.map((c) => <a href={`/category/${c}/`}>{CATEGORIES[c]}</a>)}
+        </nav>
+      )}
+      <h1>{entry.data.title}</h1>
+      <div class="prose"><Content /></div>
+    </div>
+  </article>
+  {hasGallery && <PhotoViewer />}
+</Base>

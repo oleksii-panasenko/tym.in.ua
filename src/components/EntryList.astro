@@ -1,0 +1,35 @@
+---
+import { postHref, formatShort, formatDate, CATEGORIES, type Post } from '../lib/posts';
+
+interface Props { posts: Post[]; byYear?: boolean; showCats?: boolean }
+const { posts, byYear = false, showCats = false } = Astro.props;
+
+const groups = new Map<number, Post[]>();
+for (const p of posts) {
+  const y = byYear ? p.data.date.getUTCFullYear() : 0;
+  groups.set(y, [...(groups.get(y) ?? []), p]);
+}
+---
+{[...groups].map(([year, list]) => (
+  <>
+    {byYear && (
+      <div class="year-mark row" id={`y${year}`}>
+        <div class="in-margin keep">{year}</div>
+        <div class="main"></div>
+      </div>
+    )}
+    <ul class="entries">
+      {list.map((p) => (
+        <li class="entry row">
+          <time class="in-margin keep" datetime={p.data.date.toISOString().slice(0, 10)}>
+            {byYear ? formatShort(p.data.date) : formatDate(p.data.date)}
+          </time>
+          <div class="main">
+            <a href={postHref(p)}>{p.data.title}</a>
+            {showCats && <span class="cats">{p.data.categories.map((c) => CATEGORIES[c]).join(', ')}</span>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </>
+))}

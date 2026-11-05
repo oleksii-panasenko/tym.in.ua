@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string }
+const { title, description = 'Всеукраїнський турнір юних математиків імені професора М. Й. Ядренка: завдання, результати, правила, фото.' } = Astro.props;
+const fullTitle = title ? `${title} — ТЮМ` : 'Всеукраїнський турнір юних математиків імені професора М. Й. Ядренка';
+
+const nav = [
+  ['/', 'Про турнір'],
+  ['/category/news/', 'Новини'],
+  ['/category/matherials/', 'Завдання'],
+  ['/category/results/', 'Результати'],
+  ['/aktualni-novini/pravila/', 'Правила'],
+  ['/persons/', 'Організатори і журі'],
+  ['/category/photo/', 'Фото'],
+  ['/category/useful/', 'Корисні джерела'],
+];
+const path = decodeURI(Astro.url.pathname);
+---
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+  </head>
+  <body>
+    <div class="sheet">
+      <div class="header-wrap"><header class="site-header row">
+        <div class="in-margin keep"><a class="logo" href="/" aria-label="ТЮМ — на головну">ТЮМ</a></div>
+        <nav class="main nav" aria-label="Розділи сайту">
+          {nav.map(([href, label]) => (
+            <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
+      </header></div>
+      <main id="main">
+        <slot />
+      </main>
+      <div class="footer-wrap"><footer class="site-footer row">
+        <div class="in-margin"></div>
+        <div class="main">
+          <p>Всеукраїнський турнір юних математиків імені професора М. Й. Ядренка, з 1998 року.</p>
+          <p>Захід Міністерства освіти і науки України.</p>
+        </div>
+      </footer></div>
+    </div>
+  </body>
+</html>

@@ -1,8 +1,9 @@
 {
-  "/про-тюм/": null,
-  "/матеріали-турнірів/": null,
-  "/фотогалерея/": null,
-  "/корисні-джерела/": null,
+  "/про-тюм/": "/",
+  "/матеріали-турнірів/": "/category/matherials/",
+  "/фотогалерея/": "/category/photo/",
+  "/корисні-джерела/": "/category/useful/",
+  "/2017/09/22/nakaz-depart/": "/2017/09/22/nakaz-departamentu-osviti-i-nauki-vinnickoї-oda-pro-provedennya-finalnogo-etapu-xx-turniru-yunix-matematikiv-imeni-profesora-m-j-yadrenka/",
   "/2014/09/23/завдання-xvii-тюм-2014-р/": "/2014/09/23/zavdannya-xvii-tyum-2014-r/",
   "/2013/11/10/завдання-xvi-тюм-2013-р/": "/2013/11/10/zavdannya-xvi-tyum-2013-r/",
   "/2010/11/23/фотогалерея-xiii-тюм-2010-р-м-миколаїв/": "/2010/11/23/photo-2010/",
